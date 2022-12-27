@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="prog5Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="BackDiscount">
+    <Key>
+      <PropertyRef Name="IdBackDiscount" />
+    </Key>
+    <Property Name="IdBackDiscount" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DiscountPercent" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="IdClient" />
+    </Key>
+    <Property Name="IdClient" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="Surname" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="FixingAct" Relationship="Self.FK_FixingAct_Client" FromRole="Client" ToRole="FixingAct" />
+  </EntityType>
+  <EntityType Name="FixingAct">
+    <Key>
+      <PropertyRef Name="IdAct" />
+    </Key>
+    <Property Name="IdAct" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdClient" Type="Int32" />
+    <Property Name="IdPhone" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+    <Property Name="IdRepair" Type="Int32" />
+    <Property Name="IdMaterial" Type="Int32" />
+    <NavigationProperty Name="Client" Relationship="Self.FK_FixingAct_Client" FromRole="FixingAct" ToRole="Client" />
+    <NavigationProperty Name="MaterialList" Relationship="Self.FK_FixingAct_MaterialList" FromRole="FixingAct" ToRole="MaterialList" />
+    <NavigationProperty Name="Phone" Relationship="Self.FK_FixingAct_Phone" FromRole="FixingAct" ToRole="Phone" />
+    <NavigationProperty Name="RepairType" Relationship="Self.FK_FixingAct_RepairType" FromRole="FixingAct" ToRole="RepairType" />
+  </EntityType>
+  <EntityType Name="MaterialList">
+    <Key>
+      <PropertyRef Name="IdMatList" />
+    </Key>
+    <Property Name="IdMatList" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameMaterial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Amount" Type="Int32" />
+    <NavigationProperty Name="FixingAct" Relationship="Self.FK_FixingAct_MaterialList" FromRole="MaterialList" ToRole="FixingAct" />
+  </EntityType>
+  <EntityType Name="Phone">
+    <Key>
+      <PropertyRef Name="IdPhone" />
+    </Key>
+    <Property Name="IdPhone" Type="String" MaxLength="4" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IdType" Type="Int32" />
+    <Property Name="PhoneName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Int32" />
+    <Property Name="DateOfBuy" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="FixingAct" Relationship="Self.FK_FixingAct_Phone" FromRole="Phone" ToRole="FixingAct" />
+    <NavigationProperty Name="PhoneType" Relationship="Self.FK_Phone_PhoneType" FromRole="Phone" ToRole="PhoneType" />
+  </EntityType>
+  <EntityType Name="PhoneType">
+    <Key>
+      <PropertyRef Name="IdPhoneType" />
+    </Key>
+    <Property Name="IdPhoneType" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameType" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Phone" Relationship="Self.FK_Phone_PhoneType" FromRole="PhoneType" ToRole="Phone" />
+  </EntityType>
+  <EntityType Name="RepairType">
+    <Key>
+      <PropertyRef Name="IdRepair" />
+    </Key>
+    <Property Name="IdRepair" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NameRepair" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="FixingAct" Relationship="Self.FK_FixingAct_RepairType" FromRole="RepairType" ToRole="FixingAct" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="IdUseer" />
+    </Key>
+    <Property Name="IdUseer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdRole" Type="Int32" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserRole" Relationship="Self.FK_User_UserRole" FromRole="User" ToRole="UserRole" />
+  </EntityType>
+  <EntityType Name="UserRole">
+    <Key>
+      <PropertyRef Name="IdRole" />
+    </Key>
+    <Property Name="IdRole" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="User" Relationship="Self.FK_User_UserRole" FromRole="UserRole" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_FixingAct_Client">
+    <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+    <End Role="FixingAct" Type="Self.FixingAct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="IdClient" />
+      </Principal>
+      <Dependent Role="FixingAct">
+        <PropertyRef Name="IdClient" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FixingAct_MaterialList">
+    <End Role="MaterialList" Type="Self.MaterialList" Multiplicity="0..1" />
+    <End Role="FixingAct" Type="Self.FixingAct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MaterialList">
+        <PropertyRef Name="IdMatList" />
+      </Principal>
+      <Dependent Role="FixingAct">
+        <PropertyRef Name="IdMaterial" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FixingAct_Phone">
+    <End Role="Phone" Type="Self.Phone" Multiplicity="0..1" />
+    <End Role="FixingAct" Type="Self.FixingAct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Phone">
+        <PropertyRef Name="IdPhone" />
+      </Principal>
+      <Dependent Role="FixingAct">
+        <PropertyRef Name="IdPhone" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FixingAct_RepairType">
+    <End Role="RepairType" Type="Self.RepairType" Multiplicity="0..1" />
+    <End Role="FixingAct" Type="Self.FixingAct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RepairType">
+        <PropertyRef Name="IdRepair" />
+      </Principal>
+      <Dependent Role="FixingAct">
+        <PropertyRef Name="IdRepair" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Phone_PhoneType">
+    <End Role="PhoneType" Type="Self.PhoneType" Multiplicity="0..1" />
+    <End Role="Phone" Type="Self.Phone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PhoneType">
+        <PropertyRef Name="IdPhoneType" />
+      </Principal>
+      <Dependent Role="Phone">
+        <PropertyRef Name="IdType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_UserRole">
+    <End Role="UserRole" Type="Self.UserRole" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserRole">
+        <PropertyRef Name="IdRole" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="IdRole" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CallEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="BackDiscount" EntityType="Self.BackDiscount" />
+    <EntitySet Name="Client" EntityType="Self.Client" />
+    <EntitySet Name="FixingAct" EntityType="Self.FixingAct" />
+    <EntitySet Name="MaterialList" EntityType="Self.MaterialList" />
+    <EntitySet Name="Phone" EntityType="Self.Phone" />
+    <EntitySet Name="PhoneType" EntityType="Self.PhoneType" />
+    <EntitySet Name="RepairType" EntityType="Self.RepairType" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <EntitySet Name="UserRole" EntityType="Self.UserRole" />
+    <AssociationSet Name="FK_FixingAct_Client" Association="Self.FK_FixingAct_Client">
+      <End Role="Client" EntitySet="Client" />
+      <End Role="FixingAct" EntitySet="FixingAct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FixingAct_MaterialList" Association="Self.FK_FixingAct_MaterialList">
+      <End Role="MaterialList" EntitySet="MaterialList" />
+      <End Role="FixingAct" EntitySet="FixingAct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FixingAct_Phone" Association="Self.FK_FixingAct_Phone">
+      <End Role="Phone" EntitySet="Phone" />
+      <End Role="FixingAct" EntitySet="FixingAct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FixingAct_RepairType" Association="Self.FK_FixingAct_RepairType">
+      <End Role="RepairType" EntitySet="RepairType" />
+      <End Role="FixingAct" EntitySet="FixingAct" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Phone_PhoneType" Association="Self.FK_Phone_PhoneType">
+      <End Role="PhoneType" EntitySet="PhoneType" />
+      <End Role="Phone" EntitySet="Phone" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_UserRole" Association="Self.FK_User_UserRole">
+      <End Role="UserRole" EntitySet="UserRole" />
+      <End Role="User" EntitySet="User" />
+    </AssociationSet>
+    <EntitySet Name="Balance" EntityType="prog5Model.Balance" />
+  </EntityContainer>
+  <EntityType Name="Balance">
+    <Key>
+      <PropertyRef Name="Idbalance" />
+    </Key>
+    <Property Name="Idbalance" Type="Int32" Nullable="false" />
+    <Property Name="CurrentBalance" Type="Int32" />
+  </EntityType>
+</Schema>
